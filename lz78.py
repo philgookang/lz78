@@ -1,11 +1,11 @@
-
-from node import Node
+from node import *
+from fileio import *
 
 class LZ78:
 
     rootNode = None
     output = None
-    dev = True
+    dev = False
 
     def __init__(self):
         self.output = list()
@@ -16,32 +16,33 @@ class LZ78:
         node_id = 1
         character_string = ""
 
-        # with open(input_file) as ins:
-        #     for line in ins:
-        line = "aaabbabaabaaabab"
-        #       aaabbabaabaaabab
-        for character in line:
+        io = Fileio()
+        text_list = io.read_text(input_file)
+        # text_list = ["aaabbabaabaaabab"]
 
-            is_found = self.rootNode.searchChildByEdge(character_string + character)
+        for line in text_list:
+            for character in line:
 
-            if not is_found:
-                if self.dev:
-                    print((node_id, character_string + character))
+                is_found = self.rootNode.searchChildByEdge(character_string + character)
 
-                # create child node to add
-                new_child_to_add = Node(id=node_id, edge=character)
+                if not is_found:
+                    if self.dev:
+                        print((node_id, character_string + character))
 
-                # add new child to trie
-                # get update child with parent_id
-                new_child_to_add = self.rootNode.addChild(new_child_to_add, character_string)
+                    # create child node to add
+                    new_child_to_add = Node(id=node_id, edge=character)
 
-                # save output
-                self.output.append((new_child_to_add.parent_id, new_child_to_add.edge))
+                    # add new child to trie
+                    # get update child with parent_id
+                    new_child_to_add = self.rootNode.addChild(new_child_to_add, character_string)
 
-                character_string = ""
-                node_id += 1
-            else:
-                character_string += character
+                    # save output
+                    self.output.append((new_child_to_add.parent_id, new_child_to_add.edge))
+
+                    character_string = ""
+                    node_id += 1
+                else:
+                    character_string += character
 
 
     def decrypt(self, output_file):
@@ -78,19 +79,18 @@ class LZ78:
         if self.dev:
             print(original_string)
 
+        io = Fileio()
+        io.save_text(output_file, original_string)
+
+    def save(self, output_filename):
+        io = Fileio()
+        io.save_binary(output_filename, self.output)
+
+    def open(self, input_file):
+        io = Fileio()
+        self.output = io.read_binary(input_file)
 
     def log(self):
         if self.dev:
             print(self.output)
-
-input_file = "infile.txt"
-
-enc_lz = LZ78()
-dec_lz = LZ78()
-
-enc_lz.encrypt(input_file)
-
-dec_lz.output = enc_lz.output
-dec_lz.decrypt(input_file)
-# lz.log()
 
