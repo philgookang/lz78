@@ -3,12 +3,14 @@ from fileio import *
 
 class LZ78:
 
+    dic = None
     rootNode = None
     output = None
     dev = False
 
     def __init__(self):
         self.output = list()
+        self.dic = dict()
         self.rootNode = Node(id=0, is_root=True)
 
     def encrypt(self, input_file):
@@ -53,21 +55,65 @@ class LZ78:
         # original final string
         original_string = ""
 
-        l = len(output)
-
         # loop through output list
         for idx,o in enumerate(output):
 
-            print(idx, o, l)
+            # create current search key
+            key = (idx + 1)
 
-            # check for node in TRIE that has this parent id
-            search_result = self.rootNode.addChildByParentId((idx + 1), o)
+            # empty node
+            search_result = None
+
+            # edge character
+            edge = o[1]
+
+            # edge id
+            node_id = o[0]
+
+            # get node
+            if edge in self.dic:
+
+                # set current node
+                edge_list = self.dic[edge]
+
+                for node in edge_list:
+                    if node.id == node_id:
+                        search_result = node
+                        break
+
+            # check if node was not found in dictionary
+            if search_result == None:
+
+                # add list in hash location
+                self.dic[edge] = list()
+
+                # check for node in TRIE that has this parent id
+                search_result = self.rootNode.searchChildByParentId(o[0])
+
+
+
+            # create child node to add
+            new_child_to_add = Node(parent_id=o[0], parent_node=search_result, id=key, edge=o[1])
+
+            # set node to current hash index
+            self.dic[edge].append(new_child_to_add)
+
+            # add child to parent node
+            search_result.child_node_list.append(new_child_to_add)
+
+
+            # return child because edge data start's with child node
+            search_result = new_child_to_add
+
+
+
 
             # temp save current node to root path
             statement = ""
 
             # loop through all the edges
             while search_result.edge:
+
                 # save edge value
                 statement = search_result.edge + statement
 
@@ -79,6 +125,7 @@ class LZ78:
 
             if self.dev:
                 print(statement)
+
 
         if self.dev:
             print(original_string)

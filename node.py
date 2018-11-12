@@ -69,6 +69,12 @@ class Node:
             # check if child id is equal to search parent id
             if child.id == parent_id:
                 return child
+
+            # if child node is larger than parent id,
+            # then dont need to do its children
+            elif child.id > parent_id:
+                pass
+
             # found child but still more to search
             else:
                 # check child subsearch
