@@ -70,22 +70,35 @@ class LZ78:
             # edge id
             node_id = o[0]
 
+            # check if it does exsits
+            list_does_exists = False
+
             # get node
             if edge in self.dic:
+
+                # does exists
+                list_does_exists = True
 
                 # set current node
                 edge_list = self.dic[edge]
 
-                for node in edge_list:
-                    if node.id == node_id:
-                        search_result = node
-                        break
+                #
+                if node_id in edge_list:
+                    search_result = edge_list[node_id]
+
+                # for node in edge_list:
+                #     if node.id == node_id:
+                #         search_result = node
+                #         break
 
             # check if node was not found in dictionary
             if search_result == None:
 
-                # add list in hash location
-                self.dic[edge] = list()
+                # check if i have to allocate list
+                if not list_does_exists:
+
+                    # add list in hash location
+                    self.dic[edge] = dict()
 
                 # check for node in TRIE that has this parent id
                 search_result = self.rootNode.searchChildByParentId(o[0])
@@ -96,10 +109,12 @@ class LZ78:
             new_child_to_add = Node(parent_id=o[0], parent_node=search_result, id=key, edge=o[1])
 
             # set node to current hash index
-            self.dic[edge].append(new_child_to_add)
+            # self.dic[edge].append(new_child_to_add)
+            self.dic[edge][new_child_to_add.id] = new_child_to_add
 
             # add child to parent node
-            search_result.child_node_list.append(new_child_to_add)
+            # search_result.child_node_list.append(new_child_to_add)
+            search_result.child_node_list[new_child_to_add.id] = new_child_to_add
 
 
             # return child because edge data start's with child node

@@ -13,6 +13,7 @@ enc_lz.save(output_file)
 
 dec_lz = LZ78()
 print("open")
+# dec_lz.output = enc_lz.output
 dec_lz.open(output_file)
 print("decrypt")
 dec_lz.decrypt(recover_file)
