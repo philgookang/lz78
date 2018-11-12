@@ -55,91 +55,30 @@ class LZ78:
         # original final string
         original_string = ""
 
+        # 0 index just make it blank!
+        self.dic[0] = ""
+
         # loop through output list
         for idx,o in enumerate(output):
 
             # create current search key
             key = (idx + 1)
 
-            # empty node
-            search_result = None
+            # parent id
+            parent_id = o[0]
 
-            # edge character
+            # edge
             edge = o[1]
 
-            # edge id
-            node_id = o[0]
+            # check if parent_id is in dictionary
+            if parent_id in self.dic:
+                edge = self.dic[parent_id] +  edge
 
-            # check if it does exsits
-            list_does_exists = False
+            # add to string makeup
+            original_string += edge
 
-            # get node
-            if edge in self.dic:
-
-                # does exists
-                list_does_exists = True
-
-                # set current node
-                edge_list = self.dic[edge]
-
-                #
-                if node_id in edge_list:
-                    search_result = edge_list[node_id]
-
-                # for node in edge_list:
-                #     if node.id == node_id:
-                #         search_result = node
-                #         break
-
-            # check if node was not found in dictionary
-            if search_result == None:
-
-                # check if i have to allocate list
-                if not list_does_exists:
-
-                    # add list in hash location
-                    self.dic[edge] = dict()
-
-                # check for node in TRIE that has this parent id
-                search_result = self.rootNode.searchChildByParentId(o[0])
-
-
-
-            # create child node to add
-            new_child_to_add = Node(parent_id=o[0], parent_node=search_result, id=key, edge=o[1])
-
-            # set node to current hash index
-            # self.dic[edge].append(new_child_to_add)
-            self.dic[edge][new_child_to_add.id] = new_child_to_add
-
-            # add child to parent node
-            # search_result.child_node_list.append(new_child_to_add)
-            search_result.child_node_list[new_child_to_add.id] = new_child_to_add
-
-
-            # return child because edge data start's with child node
-            search_result = new_child_to_add
-
-
-
-
-            # temp save current node to root path
-            statement = ""
-
-            # loop through all the edges
-            while search_result.edge:
-
-                # save edge value
-                statement = search_result.edge + statement
-
-                # change next node
-                search_result = search_result.parent_node
-
-            # add temp statement to final string list
-            original_string = original_string + statement
-
-            if self.dev:
-                print(statement)
+            # need to add to dictionary
+            self.dic[key] = edge
 
 
         if self.dev:
