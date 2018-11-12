@@ -1,18 +1,19 @@
 from lz78 import *
 
-input_file = "infile2.txt"
-output_file = "outfile2.bin"
-recover_file = "refile2.txt"
+input_file = "infile.txt"
+output_file = "outfile.bin"
+recover_file = "refile.txt"
 
 enc_lz = LZ78()
+print("encrypt")
 enc_lz.encrypt(input_file)
+print("save")
 enc_lz.save(output_file)
 
-print(enc_lz.output)
 
 dec_lz = LZ78()
+print("open")
 dec_lz.open(output_file)
-
-print(dec_lz.output)
-
+print("decrypt")
 dec_lz.decrypt(recover_file)
+print("done")

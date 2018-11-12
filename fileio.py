@@ -1,5 +1,6 @@
 import math
 
+from util import *
 
 class Fileio:
 
@@ -12,42 +13,63 @@ class Fileio:
 
 
     def read_binary(self, input_file):
+
         file = open(input_file, 'rb')
         encoded = file.read()
 
         tmp_output_list = list()
-        number_byte = list()
+
+        x_size = 0  # number of consecutive bytes which need to be combined
+        write_b = None  # buffer for temporal bytes
 
         node_id = ""
-        edge = ""
-        ascii_number = ""
+        node_edge = ""
 
         for byte in encoded:
 
-            # add to decode list
-            number_byte.append(byte)
+            # x_size == 0 means that previous data successfully decoded and added to result list 'st'
+            # decode next binary data
+            if x_size == 0:
+                # check 2 MSBs to know how many bytes comprises a codeword
+                header = byte & 192
+                header = header >> 6
 
-            try:
-                ascii_number = int.from_bytes(number_byte, 'big')
+                # reset number bits for precise calculations
+                if byte >= 128:
+                    byte -= 128
+                if byte >= 64:
+                    byte -= 64
 
-            except TypeError as err:
-                print("errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
-                pass
+                # convert int to bytes for concatenation with consecutive bytes
+                write_b = byte.to_bytes(1,'big')
 
-            if ascii_number != "":
+                # number of bytes of a codeword
+                x_size = header + 1
+
+            else:
+                # concatenate consecutive byte
+                write_b += byte.to_bytes(1,'big')
+
+            x_size -= 1
+
+            # if x_size = 0, add write_b to st list
+            if x_size == 0:
 
                 if node_id == "":
-                    node_id = ascii_number
-                else:
-                    edge = chr(ascii_number)
-                    c = ( node_id,  edge)
+                    node_id = int.from_bytes(write_b,'big')
+                elif node_edge == "":
+                    node_edge = chr(int.from_bytes(write_b, 'big'))
+
+                    c = (node_id, node_edge)
                     tmp_output_list.append(c)
 
                     node_id = ""
-                    edge = ""
+                    node_edge = ""
 
-                ascii_number = ""
-                number_byte.clear()
+                # convert bytes to int and add the result list
+                # tmp_output_list.append(int.from_bytes(write_b,'big'))
+                write_b = None # initialize buffer
+
 
         return tmp_output_list
 
@@ -67,16 +89,9 @@ class Fileio:
             node_id = tuple_item[0]
             node_edge = ord(tuple_item[1])
 
-            # node_id_byte_size = (node_id.bit_length() + len(str(node_id))) // 8
-            # node_edge_byte_size = (node_edge.bit_length() + len(tuple_item[1])) // 8
-
-            node_id_byte_size = math.ceil((node_id.bit_length() + len(str(node_id))) / 8)
-            node_edge_byte_size = math.ceil((node_edge.bit_length() + len(tuple_item[1])) / 8)
-
             # encode integer as bytes. Big Endian
-            node_id_bytes = node_id.to_bytes(node_id_byte_size, 'big')
-            node_edge_bytes = node_edge.to_bytes(node_edge_byte_size, 'big')
-
+            node_id_bytes = Util().encode(node_id)
+            node_edge_bytes = Util().encode(node_edge)
 
             # save big endian string encoded
             file.write(node_id_bytes)

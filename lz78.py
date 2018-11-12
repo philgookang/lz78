@@ -53,8 +53,12 @@ class LZ78:
         # original final string
         original_string = ""
 
+        l = len(output)
+
         # loop through output list
         for idx,o in enumerate(output):
+
+            print(idx, o, l)
 
             # check for node in TRIE that has this parent id
             search_result = self.rootNode.addChildByParentId((idx + 1), o)
