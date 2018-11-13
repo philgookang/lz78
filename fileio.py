@@ -70,7 +70,6 @@ class Fileio:
                 # tmp_output_list.append(int.from_bytes(write_b,'big'))
                 write_b = None # initialize buffer
 
-
         return tmp_output_list
 
 
