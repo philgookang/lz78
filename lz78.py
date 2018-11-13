@@ -33,8 +33,6 @@ class LZ78:
                 is_found = self.rootNode.searchChildByEdge(character_string + character)
 
                 if not is_found:
-                    if self.dev:
-                        print((node_id, character_string + character))
 
                     # create child node to add
                     new_child_to_add = Node(id=node_id, edge=character)
@@ -96,10 +94,6 @@ class LZ78:
             # need to add to dictionary
             self.dic[key] = edge
 
-
-        if self.dev:
-            print(original_string)
-
         io = Fileio()
         io.save_text(recover_file, original_string)
 
@@ -115,8 +109,3 @@ class LZ78:
     def open(self, input_file):
         io = Fileio()
         self.output = io.read_binary(input_file)
-
-    def log(self):
-        if self.dev:
-            print(self.output)
-
