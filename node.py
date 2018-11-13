@@ -29,6 +29,15 @@ class Node:
         self.child_node_list = dict()
 
 
+    def addChild(self, new_child):
+
+        # added new child to parent
+        self.child_node_list[new_child.id] = new_child
+
+        # return child for logging
+        return new_child
+
+
     def searchChildByEdge(self, character):
 
         # check if edge exsits
@@ -45,10 +54,34 @@ class Node:
         return False
 
 
-    def addChild(self, new_child):
+    def searchChildByParentId(self, parent_id):
 
-        # added new child to parent
-        self.child_node_list[new_child.id] = new_child
+        # exception handler for when looking for 0 parent id
+        if not parent_id:
+            return self
 
-        # return child for logging
-        return new_child
+        # loop through all child to see if their value equals search
+        if parent_id in self.child_node_list:
+            return self.child_node_list[parent_id]
+
+        # not found then go one depth more
+        else:
+
+            # loop through child to see if they have the node
+            for k in self.child_node_list:
+
+                # check if parent id is larger then child
+                if k <= parent_id:
+
+                    # get node child
+                    child = self.child_node_list[k]
+
+                    # check child subsearch
+                    return_from_recursive_search = child.searchChildByParentId(parent_id)
+
+                    # if child found, return or else, go loop next interation
+                    if return_from_recursive_search:
+                        # node found, lets return it!
+                        return return_from_recursive_search
+        # not found!
+        return False
