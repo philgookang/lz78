@@ -71,7 +71,7 @@ class LZ78:
     def decrypt(self, recover_file):
 
         # set fixed size for dictionary
-        self.dic = [None] * (len(self.output) +1)
+        self.dic = [None] * (len(self.output) + 1)
 
         # create out variable
         output = self.output
@@ -86,7 +86,7 @@ class LZ78:
         start_time = time.time()
 
         # loop through output list
-        for idx,o in enumerate(output):
+        for idx, o in enumerate(output):
 
             # create current search key
             key = (idx + 1)
@@ -99,7 +99,7 @@ class LZ78:
 
             # check if parent_id is in dictionary
             if self.dic[parent_id] != None:
-                edge = self.dic[parent_id] +  edge
+                edge = self.dic[parent_id] + edge
 
             # add to string makeup
             original_string += edge
