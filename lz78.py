@@ -11,7 +11,7 @@ class LZ78:
 
     def __init__(self):
         self.output = list()
-        self.dic = dict()
+        self.dic = list()
         self.rootNode = Node(id=0, is_root=True)
 
     def encrypt(self, input_file):
@@ -57,7 +57,10 @@ class LZ78:
         print('encoding time: ', (end_time - start_time))
 
 
-    def decrypt(self, output_file):
+    def decrypt(self, recover_file):
+
+        # set fixed size for dictionary
+        self.dic = [None] * (len(self.output) +1)
 
         # create out variable
         output = self.output
@@ -84,7 +87,7 @@ class LZ78:
             edge = o[1]
 
             # check if parent_id is in dictionary
-            if parent_id in self.dic:
+            if self.dic[parent_id] != None:
                 edge = self.dic[parent_id] +  edge
 
             # add to string makeup
@@ -98,7 +101,7 @@ class LZ78:
             print(original_string)
 
         io = Fileio()
-        io.save_text(output_file, original_string)
+        io.save_text(recover_file, original_string)
 
         # start encoding time
         end_time = time.time()
