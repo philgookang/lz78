@@ -1,5 +1,6 @@
 from node import *
 from fileio import *
+import time
 
 class LZ78:
 
@@ -22,6 +23,10 @@ class LZ78:
         text_list = io.read_text(input_file)
         # text_list = ["aaabbabaabaaabab"]
 
+        # start encoding time
+        start_time = time.time()
+
+        # go through line by line in text
         for line in text_list:
             for character in line:
 
@@ -46,6 +51,11 @@ class LZ78:
                 else:
                     character_string += character
 
+        # start encoding time
+        end_time = time.time()
+
+        print('encoding time: ', (end_time - start_time))
+
 
     def decrypt(self, output_file):
 
@@ -57,6 +67,9 @@ class LZ78:
 
         # 0 index just make it blank!
         self.dic[0] = ""
+
+        # start encoding time
+        start_time = time.time()
 
         # loop through output list
         for idx,o in enumerate(output):
@@ -86,6 +99,11 @@ class LZ78:
 
         io = Fileio()
         io.save_text(output_file, original_string)
+
+        # start encoding time
+        end_time = time.time()
+
+        print('encoding time: ', (end_time - start_time))
 
     def save(self, output_filename):
         io = Fileio()
