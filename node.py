@@ -26,8 +26,7 @@ class Node:
         self.parent_node = parent_node
         self.edge = edge
         self.is_root = is_root
-        self.child_node_list = list()
-        # self.child_node_list = dict()
+        self.child_node_list = dict()
 
 
     def searchChildByEdge(self, character_string):
@@ -43,9 +42,8 @@ class Node:
         # check if edge exsits
         for child in self.child_node_list:
 
-            # if its a blank spot then just skip
-            if child == None:
-                continue
+            # get child
+            child = self.child_node_list[child]
 
             # check if child edge is equal to search character
             if child.edge == character:
@@ -69,30 +67,29 @@ class Node:
             return self
 
         # loop through all child to see if their value equals search
-        # if parent_id in self.child_node_list:
-        if  self.child_node_list[parent_id] != None:
-
-            # node found in parent, lets return it
+        if parent_id in self.child_node_list:
             return self.child_node_list[parent_id]
 
         # not found then go one depth more
         else:
 
             # loop through child to see if they have the node
-            for child in self.child_node_list:
+            for k in self.child_node_list:
 
                 # check if parent id is larger then child
-                if child.id <= parent_id:
+                if k <= parent_id:
 
-                    # check child subsearch
+                    # get node child
+                    child = self.child_node_list[k]
+
+                     # check child subsearch
                     return_from_recursive_search = child.searchChildByParentId(parent_id)
 
-                    # if child found, return or else, go loop next interation
+                     # if child found, return or else, go loop next interation
                     if return_from_recursive_search:
 
                         # node found, lets return it!
                         return return_from_recursive_search
-
         # not found!
         return False
 
@@ -114,12 +111,9 @@ class Node:
         new_child.parent_node = last_child
 
 
-        # check if the list is long enough
-        last_child.checkChildListSize(new_child.id)
-
-
         # added new child to parent
         last_child.child_node_list[new_child.id] = new_child
+
 
         # return child for logging
         return new_child
@@ -135,19 +129,8 @@ class Node:
 
         # add child to parent node
         # search_result.child_node_list.append(new_child_to_add)
-        search_result.checkChildListSize(new_child_to_add.id)
         search_result.child_node_list[new_child_to_add.id] = new_child_to_add
 
         # return child because edge data start's with child node
         return new_child_to_add
 
-
-    def checkChildListSize(self, node_id):
-
-        child_list_size = len(self.child_node_list)
-
-        if child_list_size < (node_id + 1):
-
-            append_list = [None] * ((node_id + 1) - child_list_size)
-
-            self.child_node_list.extend(append_list)
