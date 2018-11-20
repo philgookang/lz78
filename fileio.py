@@ -37,7 +37,7 @@ class Fileio:
             binary_list.tofile(fh)
 
 
-    def read_binary(self, input_file, enc_lz):
+    def read_binary(self, input_file):
 
         binary_list = bitarray()
 
