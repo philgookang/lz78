@@ -17,10 +17,14 @@ A python version of lz78
 The following library needs to be install by using python pip.
 
 ## Wheel
+```
 sudo pip3 install -U wheel
+```
 
 ## Bitarray
+```
 sudo pip3 install -U bitarray
+```
 
 
 
@@ -30,14 +34,14 @@ sudo pip3 install -U bitarray
 ## Encoding
 Inside CLI run the following command:
 ```
-	python3 encoding.py infile.txt encoding.txt
+python3 encoding.py infile.txt encoding.txt
 ```
 
 
 ## Decoding
 Inside CLI run the following command:
 ```
-	python3 decoding.py encoding.txt outfile.txt
+python3 decoding.py encoding.txt outfile.txt
 ```
 
 
