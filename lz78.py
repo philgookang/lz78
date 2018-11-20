@@ -33,8 +33,12 @@ class LZ78:
         # start encoding time
         start_time = time.time()
 
+        # is_found child pointer leave outside for last ending insert
+        is_found = None
+
         # go through line by line in text
         for line in text_list:
+
             for character in line:
 
                 # check in dic if n
@@ -62,6 +66,10 @@ class LZ78:
                     # cummulative character string
                     character_string += character
 
+        # check if loop finished preemptly
+        if character_string != "":
+            self.output.append((is_found.parent_id, is_found.edge))
+
         # start encoding time
         end_time = time.time()
 
@@ -88,24 +96,29 @@ class LZ78:
         # loop through output list
         for idx, o in enumerate(output):
 
-            # create current search key
-            key = (idx + 1)
+            try:
 
-            # parent id
-            parent_id = o[0]
+                # create current search key
+                key = (idx + 1)
 
-            # edge
-            edge = o[1]
+                # parent id
+                parent_id = o[0]
 
-            # check if parent_id is in dictionary
-            if self.dic[parent_id] != None:
-                edge = self.dic[parent_id] + edge
+                # edge
+                edge = o[1]
 
-            # add to string makeup
-            original_string += edge
+                # check if parent_id is in dictionary
+                if self.dic[parent_id] != None:
+                    edge = self.dic[parent_id] + edge
 
-            # need to add to dictionary
-            self.dic[key] = edge
+                # add to string makeup
+                original_string += edge
+
+                # need to add to dictionary
+                self.dic[key] = edge
+
+            except IndexError as e:
+                pass
 
         io = Fileio()
         io.save_text(recover_file, original_string)
