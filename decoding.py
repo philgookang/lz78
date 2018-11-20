@@ -1,10 +1,10 @@
 from lz78 import *
 import sys
 
-binary_file = "binary.bin"
-recover_file = "refile.txt"
+binary_file = "encoding.txt"
+recover_file = "outfile.txt"
 
-dev_status = True
+dev_status = False
 
 if not dev_status:
     if len(sys.argv) <= 2:

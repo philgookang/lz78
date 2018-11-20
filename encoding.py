@@ -2,9 +2,9 @@ from lz78 import *
 import sys
 
 input_file = "infile.txt"
-binary_file = "binary.bin"
+binary_file = "encoding.txt"
 
-dev_status = True
+dev_status = False
 
 if not dev_status:
     if len(sys.argv) <= 2:
