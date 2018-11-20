@@ -16,3 +16,26 @@ class Util:
         x = x.to_bytes(x_size, 'big')
 
         return x
+
+
+    def calculateBinaryRequired(self, current):
+        size = 1
+        check_size = (2 ** size) - 1
+        while current > check_size:
+            size += 1
+            check_size = (2 ** size) - 1
+
+        return size
+
+
+    def fillZeroCharacter(self, character):
+
+        binvar = str(bin(ord(character)))[2:]
+        string_size = len(binvar)
+
+        loop_cnt = (7 - string_size)
+
+        for i in range(loop_cnt):
+            binvar = "0" + binvar
+
+        return binvar
