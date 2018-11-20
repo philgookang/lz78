@@ -7,6 +7,7 @@ class LZ78:
     dic         = None
     rootNode    = None
     output      = None
+    dev         = False
 
 
     def __init__(self):
@@ -73,7 +74,8 @@ class LZ78:
         # start encoding time
         end_time = time.time()
 
-        print('encoding time: ', (end_time - start_time))
+        if self.dev:
+            print('encoding time: ', (end_time - start_time))
 
 
     def decrypt(self, recover_file):
@@ -126,7 +128,8 @@ class LZ78:
         # start encoding time
         end_time = time.time()
 
-        print('decoding time: ', (end_time - start_time))
+        if self.dev:
+            print('decoding time: ', (end_time - start_time))
 
 
     def save(self, output_filename):
